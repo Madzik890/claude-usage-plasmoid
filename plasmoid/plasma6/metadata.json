@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Id": "com.github.madzik890.claudeusage",
+        "Name": "Claude Usage",
+        "Description": "Claude subscription usage limits",
+        "Icon": "utilities-system-monitor",
+        "Authors": [
+            {
+                "Name": "Marcin Sucharski"
+            }
+        ],
+        "Category": "System Information",
+        "License": "MIT",
+        "Version": "1.0.0",
+        "Website": "https://github.com/Madzik890/claude-usage-plasmoid"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const source = fs
-    .readFileSync(path.join(__dirname, "../../plasmoid/contents/ui/logic.js"), "utf8")
+    .readFileSync(path.join(__dirname, "../../plasmoid/common/contents/ui/logic.js"), "utf8")
     .replace(/^\.pragma library\s*$/m, "");
 const L = new Function(source + "\nreturn { level, maxPercent, formatReset, formatTime," +
     " errorText, compactText, tooltipText, parseOutput, merge };")();

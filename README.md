@@ -21,7 +21,7 @@ A KDE Plasma panel widget that always shows how much of your **Claude subscripti
 
 ## Requirements
 
-- KDE Plasma **5** (tested on 5.24). Plasma 6 is not supported yet.
+- KDE Plasma **5** (tested on 5.24) or **6** (tested on 6.3). The installer picks the right variant.
 - Python **3.10+**. Only the standard library is used.
 - `notify-send`, from the `libnotify-bin` package on Debian/Ubuntu.
 - [Claude Code](https://docs.claude.com/en/docs/claude-code), logged in with a Claude subscription. Tested with Max. `~/.claude/.credentials.json` must exist.
@@ -38,7 +38,9 @@ Then right-click the panel → **Add Widgets…** → search for **Claude Usage*
 
 `install.sh` does two things:
 - copies the helper to `~/.local/bin/claude-usage`;
-- installs or upgrades the plasmoid `com.github.madzik890.claudeusage` with `kpackagetool5`.
+- installs or upgrades the plasmoid `com.github.madzik890.claudeusage` with `kpackagetool5` or `kpackagetool6`.
+
+The Plasma version is detected from `plasmashell --version`. To choose it yourself, run `bash install.sh --plasma 5` or `bash install.sh --plasma 6`.
 
 You can preview the widget in a window without touching your panel:
 
@@ -57,7 +59,7 @@ plasmashell --replace &   # reloads a widget that is already on the panel
 ### Uninstalling
 
 ```bash
-kpackagetool5 --type Plasma/Applet --remove com.github.madzik890.claudeusage
+kpackagetool6 --type Plasma/Applet --remove com.github.madzik890.claudeusage   # kpackagetool5 on Plasma 5
 rm ~/.local/bin/claude-usage
 rm -r ~/.cache/claude-usage-widget
 ```
@@ -129,18 +131,21 @@ Options: `--warn N`, `--crit N` (notification thresholds in %) and `--no-notify`
 ```bash
 python3 -m pytest tests -q        # helper tests (no network)
 TZ=UTC node tests/js/test_logic.js # presentation logic used by the QML
-qmllint plasmoid/contents/ui/*.qml
+qmllint plasmoid/plasma6/contents/ui/*.qml
 ```
 
 ```
 helper/claude_usage.py        helper CLI (fetch, normalise, cache, alerts)
 plasmoid/                     KDE package com.github.madzik890.claudeusage
-  contents/ui/main.qml        runs the helper, holds state
-  contents/ui/logic.js        formatting / parsing (unit-tested with node)
-  contents/ui/*Representation.qml, configGeneral.qml
+  common/                     files shared by both Plasma versions
+    contents/ui/logic.js      formatting / parsing (unit-tested with node)
+    contents/config/main.xml  configuration schema
+  plasma5/, plasma6/          version-specific files: metadata.json,
+    contents/ui/main.qml      runs the helper, holds state
+    contents/ui/*Representation.qml, configGeneral.qml, config/config.qml
 tests/                        pytest suite + JS tests
 docs/superpowers/             design spec and implementation plan
-install.sh                    per-user installer
+install.sh                    per-user installer (merges common/ + plasmaN/)
 ```
 
 ## License
